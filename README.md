@@ -17,6 +17,3 @@
 
 ## How
 - Put the .dll found in the releases tab on the right in 'Assets/Plugins' in your Unity project. Create the folder if there isn't one.
-  
-## Documentation
-To Do
