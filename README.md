@@ -4,6 +4,8 @@
   - common raycasting operations
   - a simple currency handler
   - an endless spawning system
+  - a simple building handler
+  - a simple inventory handler (wip)
 
 ## Why
 - To store my re-usable code for rapid prototyping or for participating in game jams (that allow re-using code. No it's not cheating I swear) 
