@@ -97,11 +97,21 @@ namespace UnscriptedLogic.MathUtils
             return list[index];
         }
 
+        public static Vector2 RandomInArea2D(float x, float y)
+        {
+            return RandomInArea2D(new Vector2(x, y));
+        }
+
         public static Vector2 RandomInArea2D(Vector2 spawnArea)
         {
             var xPos = UnityEngine.Random.Range(-spawnArea.x / 2f, spawnArea.x / 2f);
             var yPos = UnityEngine.Random.Range(-spawnArea.y / 2f, spawnArea.y / 2f);
             return new Vector2(xPos, yPos);
+        }
+
+        public static Vector3 RandomInArea3D(float x, float y, float z)
+        {
+            return RandomInArea3D(new Vector3(x, y, z));
         }
 
         public static Vector3 RandomInArea3D(Vector3 spawnArea)
@@ -110,6 +120,26 @@ namespace UnscriptedLogic.MathUtils
             var yPos = UnityEngine.Random.Range(-spawnArea.y / 2f, spawnArea.y / 2f);
             var zPos = UnityEngine.Random.Range(-spawnArea.z / 2f, spawnArea.z / 2f);
             return new Vector3(xPos, yPos, zPos);
+        }
+
+        public static Vector2Int RandomInGrid(Vector2Int grid)
+        {
+            return RandomInGrid(grid.x, grid.y);
+        }
+
+        public static Vector2Int RandomInGrid(int x, int y)
+        {
+            int xCoord = RandomIntZeroTo(x);
+            int yCoord = RandomIntZeroTo(y);
+            return new Vector2Int(xCoord, yCoord);
+        }
+
+        public static Vector3Int RandomInGrid3D(int x, int y, int z)
+        {
+            int xCoord = RandomIntZeroTo(x);
+            int yCoord = RandomIntZeroTo(y);
+            int zCoord = RandomIntZeroTo(z);
+            return new Vector3Int(xCoord, yCoord, zCoord);
         }
 
         public static Vector3 RandomVectorDirectionAroundY()
