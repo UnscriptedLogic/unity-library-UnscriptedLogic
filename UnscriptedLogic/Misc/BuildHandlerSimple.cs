@@ -13,22 +13,29 @@ namespace UnscriptedLogic.Builders
 
         TBuildable WhenGetBuildable(TBuildableContainer buildableObject);
         void WhenCreateBuildable(int index, Vector3 position, Quaternion rotation, TBuildableContainer buildableContainer);
+        void WhenCreatePreview(int index, Vector3 position, Quaternion rotation, TBuildableContainer buildableContainer, out TBuildable buildable, out TBuildableContainer container);
         void OnConditionResult(BuildResult buildResult);
+        void ClearPreview(TBuildable buildable, TBuildableContainer container);
     }
-
 
     public struct BuildResult
     {
         private bool passed;
         private string description;
+        private string failReason;
+        private string passReason;
 
         public bool Passed => passed;
         public string Description => description;
+        public string FailReason => failReason;
+        public string PassReason => passReason;
 
-        public BuildResult(bool passed, string description)
+        public BuildResult(bool passed, string description, string failReason = "", string passReason = "")
         {
             this.passed = passed;
             this.description = description;
+            this.failReason = failReason;
+            this.passReason = passReason;
         }
     }
 
@@ -78,11 +85,15 @@ namespace UnscriptedLogic.Builders
 
     public class BuildHandlerSimple<TBuildable, Builder, BuildableContainer> where TBuildable : IBuildable where Builder : IBuilder<TBuildable, BuildableContainer>
     {
-        public delegate GameObject BuildablePreview(int index, Vector3 position, Quaternion rotation);
-        public BuildablePreview? CreateBuildablePreview;
         public List<AdminBuildCondition<TBuildable>> adminBuildConditions;
         public List<BuildableContainer> buildableObjects;
         private Builder builder;
+        private BuildableContainer? previewObject;
+        private TBuildable? previewBuildable;
+
+        public Action<int, Vector3, Quaternion, BuildableContainer>? OverrideCreateBuildable;
+        public BuildableContainer? PreviewObject => previewObject;
+        public TBuildable? PreviewBuildable => previewBuildable;
 
         public BuildHandlerSimple(Builder builder, List<BuildableContainer> buildableObjects)
         {
@@ -97,7 +108,7 @@ namespace UnscriptedLogic.Builders
             {
                 if (!adminBuildConditions[i].Condition(buildable))
                 {
-                    BuildResult failedBuildResult = new BuildResult(false, "Admin Condition " + (i + 1) + ": " + adminBuildConditions[i].Name + " failed.");
+                    BuildResult failedBuildResult = new BuildResult(false, "Admin Condition " + (i + 1) + ": " + adminBuildConditions[i].Name + " failed.", adminBuildConditions[i].OnFailConditionText, adminBuildConditions[i].OnPassConditionText);
                     OnConditionResult?.Invoke(failedBuildResult);
                     return false;
                 }
@@ -116,7 +127,7 @@ namespace UnscriptedLogic.Builders
             {
                 if (!localBuildConditions[i].Condition(position, rotation))
                 {
-                    BuildResult failedBuildResult = new BuildResult(false, "Local Condition " + (i + 1) + ": " + localBuildConditions[i].Name + " failed.");
+                    BuildResult failedBuildResult = new BuildResult(false, "Local Condition " + (i + 1) + ": " + localBuildConditions[i].Name + " failed.", localBuildConditions[i].FailConditionText, localBuildConditions[i].PassConditionText);
                     OnConditionResult?.Invoke(failedBuildResult);
                     return false;
                 }
@@ -147,8 +158,40 @@ namespace UnscriptedLogic.Builders
                 }
             }
 
+            if (OverrideCreateBuildable != null)
+            {
+                OverrideCreateBuildable(index, position, rotation, buildableObjects[index]);
+                OverrideCreateBuildable = null;
+                return;
+            }
+
             builder.WhenCreateBuildable(index, position, rotation, buildableObjects[index]);
         }
-    }
 
+        public void Preview(int index, Vector3 position, Quaternion rotation)
+        {
+            builder.WhenCreatePreview(index, position, rotation, buildableObjects[index], out previewBuildable, out previewObject);
+        }
+
+        public void ClearPreview()
+        {
+            builder.ClearPreview(previewBuildable, previewObject);
+            previewBuildable = default;
+            previewObject = default;
+        }
+
+        public void AssessPreviewAdminPass(out BuildResult adminResult)
+        {
+            BuildResult result = new BuildResult();
+            AdminConditionCheck(PreviewBuildable, x => result = x);
+            adminResult = result;
+        }
+
+        public void AssessPreviewLocalPass(Vector3 position, Quaternion rotation, out BuildResult localResult)
+        {
+            BuildResult result = new BuildResult();
+            LocalConditionCheck(PreviewBuildable, position, rotation, x => result = x);
+            localResult = result;
+        }
+    }
 }

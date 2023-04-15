@@ -34,7 +34,7 @@ namespace UnscriptedLogic.Currency
 
         public void Modify(ModifyType modifcationType, float amount)
         {
-            MathLogic.ModifyValue(modifcationType, ref current, amount);
+            RandomLogic.ModifyValue(modifcationType, ref current, amount);
 
             OnModified?.Invoke(modifcationType, amount, current);
         }
