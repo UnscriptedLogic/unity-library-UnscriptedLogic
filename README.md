@@ -18,5 +18,5 @@
 ![image](https://user-images.githubusercontent.com/86519190/220223058-5f5bfb26-0ae0-40be-be65-05114a316fd5.png)
 
 ## How 
-- Go to the package manager in Unity, click the '+' icon at the top right and select 'Add package from git url' and paste in the hhtps git url found in the green code button above.
+- Go to the package manager in Unity, click the '+' icon at the top right and select 'Add package from git url' and paste in the https git url found in the green code button above.
 - [Deprecated] Put the .dll found in the releases tab on the right in 'Assets/Plugins' in your Unity project. Create the folder if there isn't one.
