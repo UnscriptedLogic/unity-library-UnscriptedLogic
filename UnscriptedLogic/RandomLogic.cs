@@ -8,103 +8,82 @@ namespace UnscriptedLogic.MathUtils
         Subtract,
         Set,
         Divide,
-        Multiply
+        Multiply,
+        None
     }
 
     public static class RandomLogic
     {
-        public static void ModifyValue(ModifyType modificationType, ref float value, float amount)
-        {
-            switch (modificationType)
-            {
-                case ModifyType.Add:
-                    value += amount;
-                    break;
-                case ModifyType.Subtract:
-                    value -= amount;
-                    break;
-                case ModifyType.Set:
-                    value = amount;
-                    break;
-                case ModifyType.Divide:
-                    value /= amount;
-                    break;
-                case ModifyType.Multiply:
-                    value *= amount;
-                    break;
-            }
-        }
-
-        public static float RandomBetweenFloats(float start = 0f, float end = 100f)
+        public static float BetFloats(float start = 0f, float end = 100f)
         {
             return UnityEngine.Random.Range(start, end);
         }
 
-        public static float RandomBetweenFloats(Vector2 range)
+        public static float BetFloats(Vector2 range)
         {
             return UnityEngine.Random.Range(range.x, range.y);
         }
 
-        public static int RandomBetweenInts(int start = 0, int end = 100)
+        public static int BetInts(int start = 0, int end = 100)
         {
             return UnityEngine.Random.Range(start, end);
         }
 
-        public static int RandomBetweenInts(Vector2Int range)
+        public static int BetInts(Vector2Int range)
         {
             return UnityEngine.Random.Range(range.x, range.y);
         }
 
-        public static float RandomFloatZeroTo(float value)
+        public static float FloatZeroTo(float value)
         {
             return UnityEngine.Random.Range(0f, value);
         }
 
-        public static int RandomIntZeroTo(int value)
+        public static int IntZeroTo(int value)
         {
             return UnityEngine.Random.Range(0, value);
         }
 
-        public static T RandomFromArray<T>(T[] list)
+        public static T FromArray<T>(T[] list)
         {
-            return list[RandomIntZeroTo(list.Length)];
+            return list[IntZeroTo(list.Length)];
         }
 
-        public static T RandomFromArray<T>(T[] list, out int index)
+        public static T FromArray<T>(T[] list, out int index)
         {
-            index = RandomIntZeroTo(list.Length);
+            index = IntZeroTo(list.Length);
             return list[index];
         }
 
-        public static T RandomFromList<T>(List<T> list)
+        public static T FromList<T>(List<T> list)
         {
-            return list[RandomIntZeroTo(list.Count)];
+            return list[IntZeroTo(list.Count)];
         }
 
-        public static T RandomFromList<T>(List<T> list, out int index)
+        public static T FromList<T>(List<T> list, out int index)
         {
-            index = RandomIntZeroTo(list.Count);
+            index = IntZeroTo(list.Count);
             return list[index];
         }
 
-        public static Vector2 RandomInArea2D(float x, float y)
+        public static Vector2 InArea2D(float x, float y)
         {
-            return RandomInArea2D(new Vector2(x, y));
+            return InArea2D(new Vector2(x, y));
         }
 
-        public static Vector2 RandomInArea2D(Vector2 spawnArea)
+        public static Vector2 InArea2D(Vector2 spawnArea)
         {
             var xPos = UnityEngine.Random.Range(-spawnArea.x / 2f, spawnArea.x / 2f);
             var yPos = UnityEngine.Random.Range(-spawnArea.y / 2f, spawnArea.y / 2f);
             return new Vector2(xPos, yPos);
         }
 
-        public static Vector3 RandomInArea3D(float x, float y, float z)
+        public static Vector3 InArea3D(float x, float y, float z)
         {
-            return RandomInArea3D(new Vector3(x, y, z));
+            return InArea3D(new Vector3(x, y, z));
         }
 
-        public static Vector3 RandomInArea3D(Vector3 spawnArea)
+        public static Vector3 InArea3D(Vector3 spawnArea)
         {
             var xPos = UnityEngine.Random.Range(-spawnArea.x / 2f, spawnArea.x / 2f);
             var yPos = UnityEngine.Random.Range(-spawnArea.y / 2f, spawnArea.y / 2f);
@@ -112,29 +91,29 @@ namespace UnscriptedLogic.MathUtils
             return new Vector3(xPos, yPos, zPos);
         }
 
-        public static Vector2Int RandomInGrid(Vector2Int grid)
+        public static Vector2Int InGrid(Vector2Int grid)
         {
-            return RandomInGrid(grid.x, grid.y);
+            return InGrid(grid.x, grid.y);
         }
 
-        public static Vector2Int RandomInGrid(int x, int y)
+        public static Vector2Int InGrid(int x, int y)
         {
-            int xCoord = RandomIntZeroTo(x);
-            int yCoord = RandomIntZeroTo(y);
+            int xCoord = IntZeroTo(x);
+            int yCoord = IntZeroTo(y);
             return new Vector2Int(xCoord, yCoord);
         }
 
-        public static Vector3Int RandomInGrid3D(int x, int y, int z)
+        public static Vector3Int InGrid3D(int x, int y, int z)
         {
-            int xCoord = RandomIntZeroTo(x);
-            int yCoord = RandomIntZeroTo(y);
-            int zCoord = RandomIntZeroTo(z);
+            int xCoord = IntZeroTo(x);
+            int yCoord = IntZeroTo(y);
+            int zCoord = IntZeroTo(z);
             return new Vector3Int(xCoord, yCoord, zCoord);
         }
 
-        public static Vector3 RandomVectorDirectionAroundY()
+        public static Vector3 VectorDirAroundY()
         {
-            var index = RandomIntZeroTo(4);
+            var index = IntZeroTo(4);
             if (index == 0)
                 return Vector3.forward;
             if (index == 1)
@@ -144,17 +123,17 @@ namespace UnscriptedLogic.MathUtils
             return Vector3.right;
         }
 
-        public static Vector3 RandomPointAtCircumferenceXZ(Vector3 center, float radius)
+        public static Vector3 PointAtCircumferenceXZ(Vector3 center, float radius)
         {
-            var theta = RandomFloatZeroTo((float)360);
+            var theta = FloatZeroTo((float)360);
             var opposite = radius * Mathf.Sin(theta);
             var adjacent = radius * Mathf.Cos(theta);
             return center + new Vector3(adjacent, 0f, opposite);
         }
 
-        public static Vector3 RandomOfVectorDirectionAny()
+        public static Vector3 VectorDirectionAny()
         {
-            var index = RandomIntZeroTo(6);
+            var index = IntZeroTo(6);
             if (index == 0)
                 return Vector3.forward;
             if (index == 1)

@@ -267,7 +267,7 @@ namespace UnscriptedLogic.WaveSystems.Infinite
                 if (spawnSet.Count == 0)
                     break;
 
-                Spawnable selected = RandomLogic.RandomFromList(spawnSet);
+                Spawnable selected = RandomLogic.FromList(spawnSet);
                 availablePoints -= selected.Cost;
                 finalSpawnlist.Add(selected);
 

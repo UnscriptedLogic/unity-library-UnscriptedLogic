@@ -5,6 +5,32 @@ namespace UnscriptedLogic.MathUtils
 {
     public class MathLogic
     {
+        public static void ModifyValue(ModifyType modificationType, ref float value, float amount)
+        {
+            switch (modificationType)
+            {
+                case ModifyType.Add:
+                    value += amount;
+                    break;
+                case ModifyType.Subtract:
+                    value -= amount;
+                    break;
+                case ModifyType.Set:
+                    value = amount;
+                    break;
+                case ModifyType.Divide:
+                    value /= amount;
+                    break;
+                case ModifyType.Multiply:
+                    value *= amount;
+                    break;
+                case ModifyType.None:
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public static bool isWithinRange(float num, Vector2 range)
         {
             return range.x <= num && range.y >= num;

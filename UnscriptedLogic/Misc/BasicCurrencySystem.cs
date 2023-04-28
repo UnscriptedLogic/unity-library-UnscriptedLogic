@@ -2,6 +2,13 @@
 
 namespace UnscriptedLogic.Currency
 {
+    public class CurrencyEventArgs : EventArgs
+    {
+        public ModifyType modifyType;
+        public float changeValue;
+        public float currentValue;
+    }
+
     public class CurrencyHandler
     {
         private float starting;
@@ -14,9 +21,9 @@ namespace UnscriptedLogic.Currency
         public bool IsEmpty => starting == 0f;
         public bool HasNoCap => max == 0f;
 
-        public Action<ModifyType, float, float>? OnModified;
-        public Action? OnEmpty;
-        public Action? OnFull;
+        public event EventHandler<CurrencyEventArgs>? OnModified;
+        public event EventHandler? OnEmpty;
+        public event EventHandler? OnFull;
 
         public CurrencyHandler(float starting, float min = 0f, float max = 0f, bool setCurrentToStarting = true)
         {
@@ -34,9 +41,12 @@ namespace UnscriptedLogic.Currency
         public bool HasEnough(float amount) => current >= amount;
         public bool HasEnough(float amount, out float remainder) { remainder = current - amount; return current >= amount; }
 
+        public void SetMinimum(float value) => min = value;
+        public void SetMaximum(float value) => max = value;
+
         public void Modify(ModifyType modifcationType, float amount)
         {
-            RandomLogic.ModifyValue(modifcationType, ref current, amount);
+            MathLogic.ModifyValue(modifcationType, ref current, amount);
 
             if (current < min)
             {
@@ -51,17 +61,22 @@ namespace UnscriptedLogic.Currency
                 } 
             }
 
-            OnModified?.Invoke(modifcationType, amount, current);
-
-            if (current == min)
+            OnModified?.Invoke(this, new CurrencyEventArgs()
             {
-                OnEmpty?.Invoke();
+                modifyType = modifcationType, 
+                changeValue = amount, 
+                currentValue = current
+            });
+
+            if (current <= min)
+            {
+                OnEmpty?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
-            if (current == max)
+            if (current >= max)
             {
-                OnFull?.Invoke();
+                OnFull?.Invoke(this, EventArgs.Empty);
                 return;
             }
         }
