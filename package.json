@@ -1,6 +1,6 @@
 {
   "name": "com.unscriptedlogic.unscriptedlogiclib",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "displayName": "UnscriptedLogicLib",
   "description": "A quality of life and rapid prototyping package made for Unity and used in UnscriptedLogic's games",
   "unity": "2022.1",
