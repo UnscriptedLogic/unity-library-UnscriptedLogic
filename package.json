@@ -3,7 +3,7 @@
   "version": "0.0.5",
   "displayName": "UnscriptedLogicLib",
   "description": "A quality of life and rapid prototyping package made for Unity and used in UnscriptedLogic's games",
-  "unity": "2022.1",
+  "unity": "2021.1",
   "unityRelease": "0b5",
   "documentationUrl": "https://example.com/",
   "changelogUrl": "https://example.com/changelog.html",
